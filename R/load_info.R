@@ -24,9 +24,9 @@ load_info <- function(x, entries, labels, progress=TRUE) {
 		}
 		Page <- htmlTreeParse(x[i,"Link"], useInternalNodes=TRUE,
 				encoding="UTF-8")
-		Table <- readHTMLTable(Page, stringsAsFactors=FALSE)[[2]]
-		Table[is.na(Table)] <- ""
-		Table <- Table[Table[,1] != "",]
+		Table <- readHTMLTable(Page, header=FALSE, stringsAsFactors=FALSE)[[3]]
+		Table[!is.na(Table[,2]) & Table[,2] == "",2] <- NA
+        Table[!is.na(Table[,2]) & Table[,2] == "-",2] <- NA
         for(j in 1:ncol(Table)) {
             Table[,j] <- iconv(Table[,j], to="LATIN1")
         }
