@@ -1,0 +1,21 @@
+Package: conosur
+Title: Retrieve Data from Flora Del Conosur
+Version: 0.0.0.9009
+Date: 2016-02-11
+Authors@R: person("Miguel", "Alvarez", email="malvarez@uni-bonn.de",
+    role=c("aut","cre"))
+Author: Miguel Alvarez [aut, cre]
+Maintainer: Miguel Alvarez <malvarez@uni-bonn.de>
+Depends: R(>= 3.2.3)
+Imports:
+    tcltk,
+    XML
+Suggests:
+    devtools
+Description: Package retrieving information from the database Flora del
+    Conosur. Functions in conosur generate lists of valid names and synonyms
+    for species included in the display of the respective homepage.
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+URL: http://www.ipe.uni-bonn.de/pflanzenernaehrung/mitarbeiter/m_alvarez

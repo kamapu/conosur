@@ -1,0 +1,5 @@
+^\.project$
+^\.settings/de\.walware\.r\.core\.prefs$
+^\.settings/org\.eclipse\.core\.resources\.prefs$
+^tests/extras/buildignore\.R$
+^tests/extras/test_conosur\.R$

@@ -1,0 +1,15 @@
+## Import of packages
+import(
+	XML,
+	tcltk
+)
+## Export of regular function names
+export(
+    conosur_families,
+    conosur_query,
+    conosur_species,
+    load_author,
+    load_info,
+    load_synonyms,
+    tpl_families
+)
