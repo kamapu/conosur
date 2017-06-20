@@ -35,7 +35,7 @@ The tabular information displayed in the page entitled \dQuote{Detalle de la
 Especie} indicates available fields.
 }
 \value{
-Data frame \code{'x'} including additional columns with loaded information.
+A list containing the requested information.
 }
 \author{
 Miguel Alvarez, \email{malvarez@uni-bonn.de}
