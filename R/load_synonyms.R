@@ -3,7 +3,7 @@
 # Author: Miguel Alvarez
 ################################################################################
 
-load_synonyms <- function(x, Home="http://www2.darwin.edu.ar", progress=TRUE) {
+load_synonyms <- function(x, Home="http://www.darwin.edu.ar", progress=TRUE) {
     if(!"splist" %in% class(x))
         stop("'x' have to be an output of 'conosur_species'", call.=FALSE)
     if(class(x)[1] == "list") {

@@ -3,7 +3,7 @@
 # Author: Miguel Alvarez
 ################################################################################
 
-conosur_species <- function(Letter=LETTERS, Home="http://www2.darwin.edu.ar",
+conosur_species <- function(Letter=LETTERS, Home="http://www.darwin.edu.ar",
 		collapse=FALSE, progress=TRUE) {
 	Letter <- toupper(substr(Letter, 1, 1))
 	OUT <- list()

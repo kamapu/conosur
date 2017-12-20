@@ -7,10 +7,10 @@ Retrieve List of Genera and Respective Families from \dQuote{Flora del Conosur}.
 \description{
 Retrieve a table of families and genera as displayed in the page of
 \dQuote{Flora del Conosur}
-(\url{http://www2.darwin.edu.ar/Proyectos/FloraArgentina/Familias.asp}).
+(\url{http://www.darwin.edu.ar/Proyectos/FloraArgentina/Familias.asp}).
 }
 \usage{
-conosur_families(Home="http://www2.darwin.edu.ar", Letters=c("","?Letras=1",
+conosur_families(Home="http://www.darwin.edu.ar", Letters=c("","?Letras=1",
 	"?Letras=2"))
 }
 \arguments{

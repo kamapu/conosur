@@ -29,7 +29,7 @@ columns with the names specified in \code{'labels'}. If \code{'labels'} are not
 indicated, the names in \code{'entries'} will be used.
 
 To see the fields available, go to the homepage of \dQuote{Flora del Conosur}
-(\url{http://www2.darwin.edu.ar/Proyectos/FloraArgentina/fa.htm}) and search for
+(\url{http://www.darwin.edu.ar/Proyectos/FloraArgentina/fa.htm}) and search for
 or browse to one species.
 The tabular information displayed in the page entitled \dQuote{Detalle de la
 Especie} indicates available fields.
@@ -38,7 +38,7 @@ Especie} indicates available fields.
 A list containing the requested information.
 }
 \author{
-Miguel Alvarez, \email{malvarez@uni-bonn.de}
+Miguel Alvarez, \email{kamapu78@gmail.com}
 }
 \examples{
 library(conosur)

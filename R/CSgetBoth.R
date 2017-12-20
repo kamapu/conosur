@@ -3,7 +3,7 @@
 # Author: Miguel Alvarez
 ################################################################################
 
-CSgetBoth <- function(x, Home="http://www2.darwin.edu.ar", progress=TRUE) {
+CSgetBoth <- function(x, Home="http://www.darwin.edu.ar", progress=TRUE) {
 	SpAuthor <- character(0)
 	if(progress == TRUE & nrow(x) > 1) pb <- tkProgressBar(min=0, max=nrow(x),
 				width=300)
@@ -19,7 +19,7 @@ CSgetBoth <- function(x, Home="http://www2.darwin.edu.ar", progress=TRUE) {
 		Page <- htmlTreeParse(x[i,"Link"], useInternalNodes=TRUE,
 				encoding="UTF-8")
 		# Get species author
-		MainTable <- readHTMLTable(Page, stringsAsFactors=FALSE)[[2]]
+		MainTable <- readHTMLTable(Page, stringsAsFactors=FALSE)[[1]]
 		MainTable <- MainTable[!is.na(MainTable[,1]),]
 		Index <- max(which(nchar(x[i,c("species","subspecies","variety",
 												"form")]) > 1))

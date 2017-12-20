@@ -4,10 +4,10 @@
 \title{Retrieve Main Species List from \dQuote{Flora del Conosur}.}
 \description{
 Retrieve species list from the alphabetic overview in \dQuote{Flora del Conosur}
-(\url{http://www2.darwin.edu.ar/Proyectos/FloraArgentina/Especies.asp}).
+(\url{http://www.darwin.edu.ar/Proyectos/FloraArgentina/Especies.asp}).
 }
 \usage{
-conosur_species(Letter=LETTERS, Home="http://www2.darwin.edu.ar",
+conosur_species(Letter=LETTERS, Home="http://www.darwin.edu.ar",
     collapse=FALSE, progress=TRUE)
 }
 \arguments{
@@ -21,7 +21,7 @@ conosur_species(Letter=LETTERS, Home="http://www2.darwin.edu.ar",
 \details{
 \code{conosur_species} retrieves tables of species contained in the main species list
 of the database \dQuote{Flora del Conosur}
-(\url{http://www2.darwin.edu.ar/Proyectos/FloraArgentina/Especies.asp}). This
+(\url{http://www.darwin.edu.ar/Proyectos/FloraArgentina/Especies.asp}). This
 function also retrieves names for specific initials, which are displayed in
 separated pages on the mentioned home page.
 

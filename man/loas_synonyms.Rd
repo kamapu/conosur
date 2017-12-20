@@ -6,7 +6,7 @@
 Get synonyms from species lists loaded by \code{\link{conosur_species}}.
 }
 \usage{
-load_synonyms(x, Home="http://www2.darwin.edu.ar", progress=TRUE)
+load_synonyms(x, Home="http://www.darwin.edu.ar", progress=TRUE)
 }
 \arguments{
 \item{x}{Data frame as output of \code{\link{conosur_species}}.}

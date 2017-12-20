@@ -25,7 +25,7 @@ load_author <- function(x, progress=TRUE) {
 		}
 		Page <- htmlTreeParse(x[i,"Link"], useInternalNodes=TRUE,
 				encoding="UTF-8")
-		Table <- readHTMLTable(Page, stringsAsFactors=FALSE)[[2]]
+		Table <- readHTMLTable(Page, stringsAsFactors=FALSE)[[1]]
 		Table <- Table[!is.na(Table[,1]),]
 		Index <- max(which(nchar(x[i,c("species","subspecies","variety",
 												"form")]) > 1))

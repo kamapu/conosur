@@ -8,7 +8,7 @@
 \description{
 This package contains a set of functions to retrieve data from
 \dQuote{Flora del Conosur}, which is available at
-\url{http://www2.darwin.edu.ar/Proyectos/FloraArgentina/fa.htm}.
+\url{http://www.darwin.edu.ar/Proyectos/FloraArgentina/fa.htm}.
 }
 \author{
 Miguel Alvarez, \email{malvarez@uni-bonn.de}

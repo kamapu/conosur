@@ -3,14 +3,14 @@
 # Author: Miguel Alvarez
 ################################################################################
 
-conosur_families <- function(Home="http://www2.darwin.edu.ar",
+conosur_families <- function(Home="http://www.darwin.edu.ar",
 		Letters=c("","?Letras=1","?Letras=2")) {
 	Table <- list()
 	for(i in 1:length(Letters)) {
 		Page <- htmlTreeParse(paste0(Home,
 						"/Proyectos/FloraArgentina/Familias.asp", Letters[i]),
 				useInternalNodes=TRUE, encoding="UTF-8")
-		Table[[i]] <- readHTMLTable(Page, stringsAsFactors=FALSE)[[3]]
+		Table[[i]] <- readHTMLTable(Page, stringsAsFactors=FALSE)[[2]]
 	}
 	Table <- do.call(rbind, Table)
 	# Final table
@@ -24,5 +24,5 @@ conosur_families <- function(Home="http://www2.darwin.edu.ar",
     for(i in colnames(Families)) {
         Families[,i] <- iconv(Families[,i], "UTF-8", "UTF-8")
     }
-	return(Families)
+	return(Families[Families$genus != "AAA",])
 }
