@@ -1,8 +1,9 @@
 ## Import of packages
 import(
 	rvest,
+	tcltk,
 	XML,
-	tcltk
+	xml2
 )
 
 ## Export of regular function names

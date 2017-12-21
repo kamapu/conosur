@@ -10,7 +10,8 @@ Depends: R(>= 3.2.3)
 Imports:
 	rvest,
     tcltk,
-    XML
+    XML,
+    xml2
 Suggests:
     devtools
 Description: Package retrieving information from the database Flora del
