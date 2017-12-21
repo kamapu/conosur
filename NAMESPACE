@@ -1,8 +1,10 @@
 ## Import of packages
 import(
+	rvest,
 	XML,
 	tcltk
 )
+
 ## Export of regular function names
 export(
     conosur_families,
@@ -11,5 +13,6 @@ export(
     load_author,
     load_info,
     load_synonyms,
-    tpl_families
+    tpl_families,
+    tropicos_specimens
 )

@@ -8,6 +8,7 @@ Author: Miguel Alvarez [aut, cre]
 Maintainer: Miguel Alvarez <malvarez@uni-bonn.de>
 Depends: R(>= 3.2.3)
 Imports:
+	rvest,
     tcltk,
     XML
 Suggests:
