@@ -1,9 +1,7 @@
 ## Import of packages
 import(
-	rvest,
 	tcltk,
-	XML,
-	xml2
+	XML
 )
 
 ## Export of regular function names
@@ -14,6 +12,5 @@ export(
     load_author,
     load_info,
     load_synonyms,
-    tpl_families,
-    tropicos_specimens
+    tpl_families
 )
