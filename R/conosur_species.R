@@ -1,69 +1,135 @@
-# TODO:   Load main species list from Flora del Conosur
-# 
-# Author: Miguel Alvarez
-################################################################################
+#' @name get_link
+#' @title Get url for the species list
+#' @description
+#' In the Flora del Conosur species are listed in single pages by letters
+#' (initials). A first step to retrieve the list is getting the respective
+#' URLs.
+#'
+#' @param home Character value with the URL for the main site.
+#' @param letter Character vector with the requested initials.
+#'
+#' @keywords internal
+get_link <- function(home, letter) {
+  Link <- htmlTreeParse(paste0(
+    home,
+    "/Proyectos/FloraArgentina/Especies.asp?Letra=", letter
+  ),
+  useInternalNodes = TRUE, encoding = "UTF-8"
+  )
+  Link <- xpathSApply(Link, "//a/@href")
+  Link <- Link[grepl("forma=", Link)]
+  Link <- paste0(home, Link)
+  return(Link)
+}
 
-conosur_species <- function(Letter=LETTERS, Home="http://www.darwin.edu.ar",
-		collapse=FALSE, progress=TRUE) {
-	Letter <- toupper(substr(Letter, 1, 1))
-	OUT <- list()
-	if(progress == TRUE & length(Letter) > 1) progress <- TRUE else
-		progress <- FALSE
-	if(progress == TRUE) pb <- tkProgressBar(min=0, max=length(Letter),
-				width=300)
-	for(i in Letter) OUT[[i]] <- {
-			if(progress == TRUE) {
-				Sys.sleep(0.1)
-				setTkProgressBar(pb, which(Letter == i),
-						title=paste("Loading alphabetic list:",
-								round(which(Letter == i)/length(Letter)*100,),
-								"% done"))
-			}
-			Page <- htmlTreeParse(paste0(Home,
-							"/Proyectos/FloraArgentina/Especies.asp?Letra=", i),
-					useInternalNodes=TRUE, encoding="UTF-8")
-			Link <- xpathSApply(Page, "//a/@href")
-			Link <- Link[grepl("forma=", Link)]
-			Link <- paste0(Home, Link)
-			Name <- sub("/Proyectos/FloraArgentina/DetalleEspecie.asp?", "",
-					Link, fixed=TRUE)
-			Name <- gsub("&", "", Name)
-			for(j in c("forma=","variedad=","subespecie=","especie=", "genero=",
-					"espcod=")) {
-				Name <- gsub(j, "\t", Name)
-			}
-			Name <- strsplit(Name, "\t", fixed=TRUE)
-			Name <- do.call(rbind, Name)[,-1]
-			colnames(Name) <- c("form","variety","subspecies","species","genus",
-					"spcode")
-			Fullname <- with(as.data.frame(Name, stringsAsFactors=FALSE), {
-						form2 <- paste("f.", form)
-						form2[form == ""] <- ""
-						variety2 <- paste("var.", variety)
-						variety2[variety == ""] <- ""
-						subspecies2 <- paste("ssp.", subspecies)
-						subspecies2[subspecies == ""] <- ""
-						Full <- paste(genus, species, subspecies2, variety2,
-								form2)
-						Full <- gsub("^\\s+|\\s+$", "", Full, useBytes=TRUE) # leading or trailing blanks
-						Full <- gsub("\\s+", " ", Full, useBytes=TRUE) # double blanks
-						Full
-					})
-			Name <- data.frame(Name[,c("spcode","spcode")], Fullname,
-					Name[,c("genus","species","subspecies","variety","form")],
-					Link, row.names=Name[,"spcode"], stringsAsFactors=FALSE)
-			colnames(Name)[1:3] <- c("TaxonUsageID","TaxonConceptID",
-                    "TaxonName")
-            for(j in colnames(Name)) {
-                Name[,j] <- iconv(Name[,j], "UTF-8", "UTF-8")
-            }
-            Name
-		}
-	if(progress == TRUE) close(pb)
-	if(collapse == TRUE) {
-		OUT <- do.call(rbind, OUT)
-		rownames(OUT) <- OUT$TaxonUsageID
-	}
-    class(OUT) <- c(class(OUT), "splist")
-	return(OUT)
+#' @name conosur_species
+#'
+#' @title Main species list from the Flora del Conosur
+#'
+#' @description
+#' Retrieve species list from the alphabetic overview in
+#' [Flora del Conosur](http://www.darwin.edu.ar/Proyectos/FloraArgentina/Especies.asp).
+#' The species list is organized in the page by initials of the genera and can
+#' be downloaded letter-wise.
+#'
+#' @param letter Character vector indicating the initials of requested names.
+#' @param progress Logical value indicating whether a progress bar should be
+#'     initiated or not. The progress bar will be called by [tkProgressBar()].
+#'     If length of argument `'letter'` is 1, no progress bar will be called.
+#'
+#' @return
+#' An object of class [cs_species-class], which is in fact a data frame
+#' containing following variables:
+#' \describe{
+#'   \item{TaxonUsageID}{ID of the species names in Flora del Conosur.}
+#'   \item{TaxonConceptID}{ID of the taxon concept in Flora del Conosur
+#'     (the same as TaxonUsageID).}
+#'   \item{TaxonName}{Full name of the taxon (excluding author name).}
+#'   \item{genus}{Genus name.}
+#'   \item{species}{Species name.}
+#'   \item{subspecies}{Subspecies name for subspecies.}
+#'   \item{variety}{Variety name for varieties.}
+#'   \item{form}{Form name for forms.}
+#'   \item{url}{Link to the specific taxon page.}
+#' }
+#'
+#' @author Miguel Alvarez, \email{kamapu78@@gmail.com}
+#'
+#' @examples
+#' ## List for letter A
+#' splist <- conosur_species(letter = "Z")
+#' head(splist)
+#' tail(splist)
+#'
+#' ## This function is also working with words
+#' splist <- conosur_species(letter = "kilo")
+#' head(splist)
+#' tail(splist)
+#'
+#' @export conosur_species
+conosur_species <- function(letter = LETTERS, progress = TRUE) {
+  # internal objects
+  letter <- toupper(substr(letter, 1, 1))
+  home <- "http://www.darwin.edu.ar"
+  ## t_ranks <- c("genero", "especie", "subespecie", "variedad", "forma")
+  query <- list()
+  if (length(letter) == 1) {
+    progress <- FALSE
+  }
+  if (progress) {
+    pb <- tkProgressBar(
+      min = 0, max = length(letter), width = 300,
+      title = "Loading alphabetic list"
+    )
+    for (i in letter) {
+      query[[i]] <- {
+        idx <- which(letter == i)
+        Sys.sleep(0.1)
+        setTkProgressBar(pb, idx,
+          label = paste0(
+            i, " (",
+            round(idx / length(letter) * 100, ),
+            "% done)"
+          )
+        )
+        get_link(home, i)
+      }
+    }
+    close(pb)
+  } else {
+    for (i in letter) query[[i]] <- get_link(home, i)
+  }
+  # To data frame
+  query <- do.call(c, query)
+  OUT <- list()
+  OUT$TaxonConceptID <- OUT$TaxonUsageID <-
+    as.integer(sub(".*espcod=(.+)$", "\\1", query))
+  for (i in c("genero", "especie", "subespecie", "variedad", "forma")) {
+    OUT[[i]] <- sub(paste0(".*", i, "=(.+?)&.*"), "\\1", query)
+    OUT[[i]][grepl("&", OUT[[i]], fixed = TRUE)] <- ""
+  }
+  # Build taxon name
+  OUT$TaxonName <- paste(OUT$genero, OUT$especie)
+  OUT$Level <- rep("species", length(OUT$TaxonName))
+  idx <- OUT$subespecie != ""
+  OUT$TaxonName[idx] <- paste(OUT$TaxonName[idx], "ssp.", OUT$subespecie[idx])
+  OUT$Level[idx] <- "subspecies"
+  idx <- OUT$variedad != ""
+  OUT$TaxonName[idx] <- paste(OUT$TaxonName[idx], "var.", OUT$variedad[idx])
+  OUT$Level[idx] <- "variety"
+  idx <- OUT$forma != ""
+  OUT$TaxonName[idx] <- paste(OUT$TaxonName[idx], "f.", OUT$forma[idx])
+  OUT$Level[idx] <- "form"
+  OUT$Level <- factor(OUT$Level, levels = c(
+    "form", "variety", "subspecies",
+    "species"
+  ))
+  OUT$url <- query
+  OUT <- as.data.frame(OUT, stringsAsFactors = FALSE)
+  names(OUT) <- replace_x(names(OUT),
+    old = c("genero", "especie", "subespecie", "variedad", "forma"),
+    new = c("genus", "species", "subspecies", "variety", "form")
+  )
+  class(OUT) <- c("cs_species", "data.frame")
+  return(OUT)
 }
