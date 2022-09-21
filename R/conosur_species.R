@@ -1,4 +1,4 @@
-#' @name get_link
+#' @name get_url
 #' @title Get url for the species list
 #' @description
 #' In the Flora del Conosur species are listed in single pages by letters
@@ -9,7 +9,7 @@
 #' @param letter Character vector with the requested initials.
 #'
 #' @keywords internal
-get_link <- function(home, letter) {
+get_url <- function(home, letter) {
   Link <- htmlTreeParse(paste0(
     home,
     "/Proyectos/FloraArgentina/Especies.asp?Letra=", letter
@@ -92,12 +92,12 @@ conosur_species <- function(letter = LETTERS, progress = TRUE) {
             "% done)"
           )
         )
-        get_link(home, i)
+        get_url(home, i)
       }
     }
     close(pb)
   } else {
-    for (i in letter) query[[i]] <- get_link(home, i)
+    for (i in letter) query[[i]] <- get_url(home, i)
   }
   # To data frame
   query <- do.call(c, query)

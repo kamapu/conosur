@@ -8,13 +8,64 @@ library(taxlist)
 library(readODS)
 library(XML)
 library(tcltk)
+library(conosur)
+library(stringr)
 
 # Testing functions
-source("R/conosur_species.R")
-source("R/load_author.R")
+## source("R/conosur_species.R")
+## source("R/load_author.R")
 
-t1 <- conosur_species("Z")
-t2 <- load_author(t1[1:5, ])
+source("R/get_info.R")
+source("R/get_synonyms.R")
+t1 <- conosur_species("Z")[1:3, ]
+t2 <- get_info(t1)
+
+
+OUT <- list()
+
+x = t2[1,]
+
+x = t2
+progress = FALSE
+
+i <- 1
+
+
+t10 <- conosur_species(letter = "K")[1:5, ]
+t11 <- get_info(t10)
+t12 <- get_synonyms(t11)
+
+(Test <- df2taxlist(t12))
+
+summary(Test, "all")
+
+
+x = t11
+progress = TRUE
+
+
+
+
+browseURL(splist[5, "url"])
+
+
+A <- list("A", NULL, "B")
+do.call(c, A)
+
+
+Test <- get_table(t1[1,])
+
+
+x <- t1
+progress = TRUE
+
+
+splist <- conosur_species(letter = "K")[1:5, ]
+splist <- get_synonyms(splist)
+head(splist)
+
+
+
 
 
 

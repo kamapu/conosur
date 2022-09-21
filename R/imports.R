@@ -1,5 +1,6 @@
 #' @importFrom methods setOldClass
-#' @importFrom taxlist replace_x
+#' @importFrom stringr str_split
+#' @importFrom taxlist dissect_name insert_rows replace_x
 #' @importFrom tcltk tkProgressBar setTkProgressBar
-#' @importFrom XML htmlTreeParse readHTMLTable xpathSApply
+#' @importFrom XML htmlTreeParse readHTMLTable xmlValue xpathSApply
 NULL

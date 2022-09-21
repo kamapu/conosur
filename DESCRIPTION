@@ -8,6 +8,7 @@ Maintainer: Miguel Alvarez <malvarez@uni-bonn.de>
 Depends: R(>= 4.0)
 Imports:
   methods,
+  stringr,
   taxlist,
   tcltk,
   XML
