@@ -1,6 +1,6 @@
 Package: conosur
 Title: Retrieve Data from Flora Del Conosur
-Version: 0.0.0.9011
+Version: 0.0.1
 Date: 2016-02-11
 Authors@R: person("Miguel", "Alvarez", email="malvarez@uni-bonn.de", role=c("aut","cre"))
 Author: Miguel Alvarez [aut, cre]
