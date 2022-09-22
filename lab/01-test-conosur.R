@@ -14,14 +14,66 @@ library(stringr)
 # Testing functions
 ## source("R/conosur_species.R")
 ## source("R/load_author.R")
+## source("R/get_synonyms.R")
 
-source("R/get_info.R")
-source("R/get_synonyms.R")
-t1 <- conosur_species("Z")[1:3, ]
+library(conosur)
+t1 <- conosur_species("Z")
+t2 <- get_info(t1, TaxonConceptID %in% c(173379, 24062, 196608))
+
+
+
+
+t2 <- get_synonyms(t1, TaxonConceptID %in% c(173379, 24062, 196608))
+
+t3 <- get_synonyms(t1, TaxonConceptID == 24062)
+
+
+
+x = t1
+progress = TRUE
+idx <- substitute(TaxonConceptID %in% c(173379, 24062, 196608))
+
+
+x <- t2 <- conosur_species(letter = "K")
+idx <- substitute(TaxonConceptID %in% t2$TaxonConceptID[1:5])
+
+i <- 3
+x <- x[i, ]
+
+
+i <- 4
+home <- "http://www.darwin.edu.ar"
+x <- x[i, ]
+
+#' splist <- get_synonyms(splist)
+
+
+
 t2 <- get_info(t1)
 
 
+
+m_funct <- function(x) if (x > 1) return(5) else stop ("x = 1!")
+
+m_funct(2)
+m_funct(1)
+
+
+
+# Check this!
+
+m_funct2 <- function(x) tryCatch({
+        OUT <- NULL
+        OUT <- m_funct(x)}, error = function(e) message("Error here!"),
+      finally = return(OUT))
+
+m_funct2(2)
+m_funct2(1)
+
+
 OUT <- list()
+
+
 
 x = t2[1,]
 
@@ -124,11 +176,24 @@ t3 <- sub(paste0(".*", i, "=(.+?)&.*"), "\\1", query)
 head(t3)
 
 
-a<-" anything goes here, STR1GET_ME& but not me&, anything goes here"
 
-gsub(".*STR1(.+)&.*", "\\1", a)
+# Main test
+library(conosur)
 
-gsub(".*STR1(.*?)&.*", "\\1", a)
+start_time <- Sys.time()
+t10 <- conosur_species()
+end_time <- Sys.time()
 
+end_time - start_time
+
+start_time2 <- Sys.time()
+t10 <- conosur_species(progress = FALSE)
+end_time2 <- Sys.time()
+
+end_time2 - start_time2
+
+
+t11 <- get_info(t10)
+t12 <- get_synonyms(t11)
 
 

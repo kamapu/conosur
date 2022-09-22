@@ -8,12 +8,16 @@
 \usage{
 get_synonyms(x, ...)
 
-\method{get_synonyms}{cs_species}(x, progress = TRUE, ...)
+\method{get_synonyms}{cs_species}(x, subset, progress = TRUE, ...)
 }
 \arguments{
 \item{x}{A \linkS4class{cs_species} object.}
 
 \item{...}{Further arguments passed among methods.}
+
+\item{subset}{An expression selecting a subset of rows for retrieving
+synonyms. This can be useful if a previous run had failed in some
+species.}
 
 \item{progress}{A logical value indicating whether a progress bar should be
 displayed or not.}

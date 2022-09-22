@@ -69,9 +69,8 @@ get_url <- function(home, letter) {
 #' @export conosur_species
 conosur_species <- function(letter = LETTERS, progress = TRUE) {
   # internal objects
-  letter <- toupper(substr(letter, 1, 1))
+  letter <- unique(toupper(substr(letter, 1, 1)))
   home <- "http://www.darwin.edu.ar"
-  ## t_ranks <- c("genero", "especie", "subespecie", "variedad", "forma")
   query <- list()
   if (length(letter) == 1) {
     progress <- FALSE

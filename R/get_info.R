@@ -8,27 +8,38 @@
 #'
 #' @keywords internal
 get_table <- function(x) {
-  Table <- htmlTreeParse(x$url,
-    useInternalNodes = TRUE,
-    encoding = "UTF-8"
+  tryCatch(
+    {
+      OUT <- NULL
+      Table <- htmlTreeParse(x$url,
+        useInternalNodes = TRUE,
+        encoding = "UTF-8"
+      )
+      Table <- readHTMLTable(Table, stringsAsFactors = FALSE)[[1]]
+      Table <- Table[!is.na(Table[, 1]), ]
+      # For sensu stricto
+      if (x$Level != "species" & x[, x$Level, drop = TRUE] == x$species) {
+        x$Level <- "species"
+      }
+      x$Level <- c("Sigla sp.", "Sigla ssp.", "Sigla var.", "Sigla f.")[
+        match(x$Level, c("species", "subspecies", "variety", "form"))
+      ]
+      OUT <- c(
+        as.integer(x$TaxonConceptID),
+        Table[match(
+          c(x$Level, "Status", "H\u00e1bito", "Elevaci\u00f3n (m s.m.)"),
+          Table[, 1]
+        ), 2]
+      )
+    },
+    error = function(e) {
+      message(paste0(
+        "Error at concept '",
+        x$TaxonConceptID, "'!"
+      ))
+    },
+    finally = return(OUT)
   )
-  Table <- readHTMLTable(Table, stringsAsFactors = FALSE)[[1]]
-  Table <- Table[!is.na(Table[, 1]), ]
-  # For sensu stricto
-  if (x$Level != "species" & x[, x$Level, drop = TRUE] == x$species) {
-    x$Level <- "species"
-  }
-  x$Level <- c("Sigla sp.", "Sigla ssp.", "Sigla var.", "Sigla f.")[
-    match(x$Level, c("species", "subspecies", "variety", "form"))
-  ]
-  OUT <- c(
-    as.integer(x$TaxonConceptID),
-    Table[match(
-      c(x$Level, "Status", "Hábito", "Elevación (m s.m.)"),
-      Table[, 1]
-    ), 2]
-  )
-  return(OUT)
 }
 
 #' @name get_info
@@ -41,6 +52,9 @@ get_table <- function(x) {
 #' [conosur_species()] need to be requested in specific pages.
 #'
 #' @param x A [cs_species-class] object.
+#' @param subset An expression selecting a subset of rows for retrieving the
+#'     information. This can be useful if a previous run had failed in some
+#'     species.
 #' @param progress A logical value indicating whether a progress bar should be
 #'     displayed or not.
 #' @param ... Further arguments passed among methods.
@@ -66,7 +80,13 @@ get_info <- function(x, ...) {
 #' @aliases get_info,cs_species-method
 #' @method get_info cs_species
 #' @export
-get_info.cs_species <- function(x, progress = TRUE, ...) {
+get_info.cs_species <- function(x, subset, progress = TRUE, ...) {
+  if (!missing(subset)) {
+    idx <- substitute(subset)
+    idx <- eval(idx, x, parent.frame())
+    x_in <- x
+    x <- x[idx, ]
+  }
   if (nrow(x) == 1) {
     progress <- FALSE
   }
@@ -74,7 +94,7 @@ get_info.cs_species <- function(x, progress = TRUE, ...) {
   if (progress) {
     pb <- tkProgressBar(
       min = 0, max = nrow(x), width = 300,
-      title = "Loading authors"
+      title = "Loading species info"
     )
     for (i in 1:nrow(x)) {
       Sys.sleep(0.1)
@@ -105,8 +125,20 @@ get_info.cs_species <- function(x, progress = TRUE, ...) {
   colnames(ele) <- c("elevation_min", "elevation_max")
   sp_info$elevation_min <- as.integer(ele[, "elevation_min"])
   sp_info$elevation_max <- as.integer(ele[, "elevation_max"])
+  sp_info <- sp_info[, names(sp_info) != "elevation"]
   sp_info$AuthorName <- iconv(sp_info$AuthorName, "UTF-8", "UTF-8")
-  x <- merge(x, sp_info[, names(sp_info) != "elevation"], all.x = TRUE)
-  class(x) <- c("cs_species", "data.frame")
+  if (!missing(subset)) {
+    x <- x_in
+  }
+  for (i in names(sp_info)[names(sp_info) != "TaxonConceptID"]) {
+    if (!i %in% names(x)) {
+      x[, i] <- NA
+    }
+    x[, i] <- replace_idx(x[, i],
+      idx1 = x$TaxonConceptID,
+      idx2 = sp_info$TaxonConceptID, new = sp_info[, i, drop = TRUE]
+    )
+  }
+  # class(x) <- c("cs_species", "data.frame")
   return(x)
 }
