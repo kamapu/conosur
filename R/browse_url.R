@@ -12,7 +12,7 @@
 #'     browser.
 #' @param ... Further arguments passed to [browseURL()].
 #'
-#' @export get_info
+#' @export browse_url
 browse_url <- function(x, ...) {
   UseMethod("browse_url", x)
 }

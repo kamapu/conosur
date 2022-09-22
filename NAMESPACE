@@ -3,6 +3,7 @@
 S3method(browse_url,cs_species)
 S3method(get_info,cs_species)
 S3method(get_synonyms,cs_species)
+export(browse_url)
 export(conosur_species)
 export(get_info)
 export(get_synonyms)
