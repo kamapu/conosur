@@ -1,5 +1,8 @@
+^\.settings$
+^\.gitignore$
 ^\.project$
-^\.settings/de\.walware\.r\.core\.prefs$
-^\.settings/org\.eclipse\.core\.resources\.prefs$
-^tests/extras/buildignore\.R$
-^tests/extras/test_conosur\.R$
+^lab$
+^R-old$
+^build-pkg$
+^README\.Rmd$
+^README\.md$
